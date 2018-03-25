@@ -26,50 +26,122 @@
    {
      "_links": {
        "employees": {
-         "href": "http://localhost:8085/employee{?page,size,sort}",
+         "href": "http://localhost:8080/employee{?page,size,sort}",
          "templated": true
        },
        "collection": {
-         "href": "http://localhost:8085/people{?page,size,sort}",
+         "href": "http://localhost:8080/people{?page,size,sort}",
          "templated": true
        },
        "profile": {
-         "href": "http://localhost:8085/profile"
+         "href": "http://localhost:8080/profile"
        }
      }
    }
    ```
 
-As we can see, there is http://localhost:8085/people endpoint under `collection` resource.
+As we can see, there is http://localhost:8080/people endpoint under `collection` resource.
 
 Spring Data Rest by default provides `CRUD` rest resources.
 
-##### Create
-    For creating resource, execute below code in terminal.
-    ```bash
+##### CREATE
+
+For creating resource, execute below code in terminal.
+```console
     curl -X POST \
-      http://localhost:8085/people \
+      http://localhost:8080/people \
       -H 'content-type: application/json' \
       -d '{
        "firstName" : "John",
        "lastName": "Doe"
     }'
-    ```
-    In Response, we will be getting `HTTP status 201` & response will be like below:
-    ```json
+```
+
+In Response, we will be getting `HTTP status 201` & response will be like below:
+```json
     {
         "firstName": "John",
         "lastName": "Doe",
         "_links": {
             "self": {
-                "href": "http://localhost:8085/people/1"
+                "href": "http://localhost:8080/people/1"
             },
             "person": {
-                "href": "http://localhost:8085/people/1"
+                "href": "http://localhost:8080/people/1"
             },
             "employee": {
-                "href": "http://localhost:8085/people/1/employee"
+                "href": "http://localhost:8080/people/1/employee"
             }
         }
     }
-    ```
+```
+
+
+##### GET
+
+For getting resource by id hit  `http://localhost:8080/people/1` respone will be like this:
+```json
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/people/1"
+        },
+        "person": {
+            "href": "http://localhost:8080/people/1"
+        },
+        "employee": {
+            "href": "http://localhost:8080/people/1/employee"
+        }
+    }
+}
+```
+
+For getting all resource hit `http://localhost:8080/people/`
+
+##### PUT
+For updating resource execute following in console.
+```console
+PUT /people/1 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+{
+  "firstName" : "James",
+  "lastName": "Doe"
+}
+```
+This will update the Resource. `PATCH` is similar to PUT but partially updating the resources state.
+
+##### DELETE
+For removing resource hit `http://localhost:8080/people/1`
+
+##### Search
+Spring data rest by default expose all method that are part of our repository. By hitting http://localhost:8080/search rest end point, response would be like this
+```json
+{
+    "_links": {
+        "findByLastName": {
+            "href": "http://localhost:8080/people/search/findByLastName{?name}",
+            "templated": true
+        },
+        "findByFirstNameAndLastName": {
+            "href": "http://localhost:8080/people/search/findByFirstNameAndLastName{?firstName,lastName}",
+            "templated": true
+        },
+        "relation": {
+            "href": "http://localhost:8080/people/search/getByFirstName{?firstName,page,size,sort}",
+            "templated": true
+        },
+        "self": {
+            "href": "http://localhost:8080/people/search"
+        }
+    }
+}
+```
+Here we are getting links for searching resource based on methods defined in repository
+For example
+* search by last name - http://localhost:8080/people/search/findByLastName?name=Doe
+* search by first & last name - http://localhost:8080/people/search/findByFirstNameAndLastName?firstName=John&lastName=Doe
+* search by first name with paging size - http://localhost:8080/people/search/getByFirstName?firstName=John&page=0&size=5
+* search by first name, sorting on last name - http://localhost:8080/people/search/getByFirstName?firstName=John&sort=lastName,asc
