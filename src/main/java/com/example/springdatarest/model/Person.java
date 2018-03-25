@@ -20,8 +20,8 @@ public class Person {
 
     private String lastName;
 
-/*    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private Employee employee;*/
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Employee employee;
 
 
     public String getFirstName() {
@@ -38,5 +38,13 @@ public class Person {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }
