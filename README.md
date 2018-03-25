@@ -116,7 +116,7 @@ This will update the Resource. `PATCH` is similar to PUT but partially updating 
 ##### DELETE
 For removing resource hit `http://localhost:8080/people/1`
 
-##### Search
+##### SEARCH
 Spring data rest by default expose all method that are part of our repository. By hitting http://localhost:8080/search rest end point, response would be like this
 ```json
 {
@@ -145,3 +145,18 @@ For example
 * search by first & last name - http://localhost:8080/people/search/findByFirstNameAndLastName?firstName=John&lastName=Doe
 * search by first name with paging size - http://localhost:8080/people/search/getByFirstName?firstName=John&page=0&size=5
 * search by first name, sorting on last name - http://localhost:8080/people/search/getByFirstName?firstName=John&sort=lastName,asc
+
+#### Configuration
+There are few properties which we can alter. We can either update this configuration using `RepositoryRestConfigurer` or in `application.properties`
+
+| Name  | Description |
+| ----- | ----------- |
+| basePath | root URI for Spring Data Rest|
+| defaultPageSize | default number of items served in a single page |
+| maxPageSize | maximum number of items in a single page|
+| pageParamName | name of the query parameter for selecting pages|
+| limitParamName | name of the query parameter for number of items to show in a page|
+| sortParamName | name of the query parameter for sorting  |
+| returnBodyOnCreate | if a body should be returned on creating a new entity|
+| returnBodyOnUpdate |  if a body should be returned on updating an entity|
+
